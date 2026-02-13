@@ -1,65 +1,91 @@
-import Image from "next/image";
+import Link from "next/link";
+import { getAllPosts, getCategories, formatCategoryName, getAllTags } from "@/lib/posts";
+import { AUTHOR } from "@/lib/types";
+import CategorySidebar from "@/components/CategorySidebar";
+import PostListClient from "@/components/PostListClient";
 
-export default function Home() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+export default function HomePage() {
+    const categories = getCategories();
+    const allPosts = getAllPosts();
+    const allTags = getAllTags();
+
+    return (
+        <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-8">
+            {/* Sidebar */}
+            <aside className="hidden lg:block">
+                <div className="sticky top-24">
+                    <CategorySidebar categories={categories} />
+                </div>
+            </aside>
+
+            {/* Main Content */}
+            <div>
+                {/* Hero */}
+                <section className="mb-10 relative overflow-hidden rounded-2xl gradient-primary-subtle border border-primary/15 p-8 md:p-10">
+                    <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-primary/5 -translate-y-1/2 translate-x-1/2" />
+                    <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-primary/5 translate-y-1/2 -translate-x-1/2" />
+                    <div className="relative">
+                        <h1 className="text-3xl md:text-4xl font-bold mb-3">
+                            Welcome to{" "}
+                            <span className="gradient-text">
+                                Nhật&apos;s Blog
+                            </span>
+                        </h1>
+                        <p className="text-muted text-lg max-w-2xl">
+                            Chia sẻ kiến thức về công nghệ, phỏng vấn và nhiều hơn
+                            nữa. By {AUTHOR}.
+                        </p>
+                    </div>
+                </section>
+
+                {/* Category Cards */}
+                <section className="mb-10">
+                    <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                        <span className="w-1 h-6 gradient-primary rounded-full" />
+                        Categories
+                    </h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        {Object.entries(categories).map(([cat, subs]) => (
+                            <Link
+                                key={cat}
+                                href={`/category/${cat}`}
+                                className="group card p-5 relative overflow-hidden"
+                            >
+                                <div className="absolute top-0 left-0 right-0 h-1 gradient-primary opacity-60 group-hover:opacity-100 transition-opacity" />
+                                <div className="flex items-center gap-3 mb-3">
+                                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                                        <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                                        </svg>
+                                    </div>
+                                    <h3 className="font-semibold group-hover:text-primary transition-colors">
+                                        {formatCategoryName(cat)}
+                                    </h3>
+                                </div>
+                                <p className="text-sm text-muted mb-2">
+                                    {subs.length} subcategor
+                                    {subs.length === 1 ? "y" : "ies"}
+                                </p>
+                                <div className="flex flex-wrap gap-1">
+                                    {subs.map((sub) => (
+                                        <span
+                                            key={sub}
+                                            className="text-xs bg-primary/8 text-primary/80 px-2 py-0.5 rounded-full"
+                                        >
+                                            {formatCategoryName(sub)}
+                                        </span>
+                                    ))}
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+                </section>
+
+                {/* Posts Section with client-side pagination & filtering */}
+                <section>
+                    <PostListClient allPosts={allPosts} allTags={allTags} />
+                </section>
+            </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+    );
 }
