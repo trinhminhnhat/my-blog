@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Search, X, ChevronUp, ChevronDown, Check } from "lucide-react";
+import { Search, X, ChevronUp, ChevronDown, Check, ChevronsUpDown } from "lucide-react";
 import type { PostMeta } from "@/lib/types";
 import { POSTS_PER_PAGE } from "@/lib/types";
 import PostCard from "./PostCard";
@@ -16,6 +16,9 @@ export default function PaginatedPosts({ allPosts }: PaginatedPostsProps) {
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [sortBy, setSortBy] = useState<"date" | "title" | "description">("date");
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+    const [tagsExpanded, setTagsExpanded] = useState(false);
+
+    const MAX_VISIBLE_TAGS = 10;
 
     const allTags = useMemo(() => {
         const tags = new Set<string>();
@@ -142,23 +145,55 @@ export default function PaginatedPosts({ allPosts }: PaginatedPostsProps) {
                             <h3 className="text-sm font-semibold uppercase tracking-wider text-primary flex items-center gap-2">
                                 <span className="w-1 h-4 gradient-primary rounded-full" />
                                 Filter by tags
+                                <span className="text-xs font-normal text-muted normal-case tracking-normal">
+                                    ({allTags.length})
+                                </span>
                                 {selectedTags.length > 0 && (
                                     <span className="w-5 h-5 rounded-full gradient-primary text-white text-xs font-bold inline-flex items-center justify-center shadow-sm shadow-primary/25">
                                         {selectedTags.length}
                                     </span>
                                 )}
                             </h3>
-                            {hasFilters && (
-                                <button
-                                    onClick={clearAll}
-                                    className="text-xs text-primary hover:underline cursor-pointer"
-                                >
-                                    Clear all
-                                </button>
-                            )}
+                            <div className="flex items-center gap-2">
+                                {hasFilters && (
+                                    <button
+                                        onClick={clearAll}
+                                        className="text-xs text-primary hover:underline cursor-pointer"
+                                    >
+                                        Clear all
+                                    </button>
+                                )}
+                                {allTags.length > MAX_VISIBLE_TAGS && (
+                                    <button
+                                        onClick={() => setTagsExpanded(!tagsExpanded)}
+                                        className="text-xs text-muted hover:text-primary cursor-pointer flex items-center gap-0.5"
+                                    >
+                                        <ChevronsUpDown className="w-3.5 h-3.5" />
+                                        {tagsExpanded ? "Less" : "More"}
+                                    </button>
+                                )}
+                            </div>
                         </div>
+
+                        {/* Selected tags (always visible) */}
+                        {!tagsExpanded && selectedTags.length > 0 && (
+                            <div className="flex flex-wrap gap-1.5 mb-1.5">
+                                {selectedTags.map((tag) => (
+                                    <button
+                                        key={tag}
+                                        onClick={() => handleTagClick(tag)}
+                                        className="text-xs px-2.5 py-1 rounded-full cursor-pointer inline-flex items-center gap-1 gradient-primary text-white shadow-md shadow-primary/25"
+                                    >
+                                        #{tag}
+                                        <X className="w-3 h-3" />
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* All tags / collapsed tags */}
                         <div className="flex flex-wrap gap-1.5">
-                            {allTags.map((tag) => (
+                            {(tagsExpanded ? allTags : allTags.filter((t) => selectedTags.includes(t) ? false : true).slice(0, MAX_VISIBLE_TAGS)).map((tag) => (
                                 <button
                                     key={tag}
                                     onClick={() => handleTagClick(tag)}
@@ -174,6 +209,14 @@ export default function PaginatedPosts({ allPosts }: PaginatedPostsProps) {
                                     )}
                                 </button>
                             ))}
+                            {!tagsExpanded && allTags.length > MAX_VISIBLE_TAGS + selectedTags.length && (
+                                <button
+                                    onClick={() => setTagsExpanded(true)}
+                                    className="text-xs px-2.5 py-1 rounded-full cursor-pointer border border-dashed border-primary/30 text-primary hover:bg-primary/8"
+                                >
+                                    +{allTags.length - MAX_VISIBLE_TAGS - selectedTags.filter((t) => allTags.indexOf(t) >= MAX_VISIBLE_TAGS).length} more
+                                </button>
+                            )}
                         </div>
                     </div>
                 )}
