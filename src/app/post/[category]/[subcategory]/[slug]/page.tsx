@@ -8,6 +8,7 @@ import {
     formatDate,
     extractTOC,
 } from "@/lib/posts";
+import { Calendar, User } from "lucide-react";
 import { AUTHOR } from "@/lib/types";
 import CategorySidebar from "@/components/CategorySidebar";
 import TableOfContents from "@/components/TableOfContents";
@@ -65,20 +66,20 @@ export default async function PostPage({
             <article className="min-w-0" data-pagefind-body>
                 {/* Breadcrumb */}
                 <nav className="flex items-center gap-2 text-sm text-muted mb-6 flex-wrap">
-                    <Link href="/" className="hover:text-primary transition-colors">
+                    <Link href="/" className="hover:text-primary">
                         Home
                     </Link>
                     <span className="text-primary/40">/</span>
                     <Link
                         href={`/category/${category}`}
-                        className="hover:text-primary transition-colors"
+                        className="hover:text-primary"
                     >
                         {formatCategoryName(category)}
                     </Link>
                     <span className="text-primary/40">/</span>
                     <Link
                         href={`/category/${category}/${subcategory}`}
-                        className="hover:text-primary transition-colors"
+                        className="hover:text-primary"
                     >
                         {formatCategoryName(subcategory)}
                     </Link>
@@ -95,16 +96,12 @@ export default async function PostPage({
                     </h1>
                     <div className="flex items-center gap-4 text-sm text-muted flex-wrap">
                         <span className="flex items-center gap-1.5">
-                            <svg className="w-4 h-4 text-primary/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
+                            <Calendar className="w-4 h-4 text-primary/60" />
                             {formatDate(post.frontmatter.date)}
                         </span>
                         <span className="text-primary/30">•</span>
                         <span className="flex items-center gap-1.5">
-                            <svg className="w-4 h-4 text-primary/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                            </svg>
+                            <User className="w-4 h-4 text-primary/60" />
                             {AUTHOR}
                         </span>
                     </div>
@@ -113,7 +110,7 @@ export default async function PostPage({
                             <Link
                                 key={tag}
                                 href={`/?tag=${tag}`}
-                                className="text-xs bg-primary/10 text-primary font-medium px-2.5 py-1 rounded-full hover:bg-primary/20 transition-colors"
+                                className="text-xs bg-primary/10 text-primary font-medium px-2.5 py-1 rounded-full hover:bg-primary/20"
                             >
                                 #{tag}
                             </Link>

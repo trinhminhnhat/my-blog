@@ -61,13 +61,13 @@ export default async function SubcategoryPage({
             <div>
                 {/* Breadcrumb */}
                 <nav className="flex items-center gap-2 text-sm text-muted mb-6">
-                    <Link href="/" className="hover:text-primary transition-colors">
+                    <Link href="/" className="hover:text-primary">
                         Home
                     </Link>
                     <span className="text-primary/40">/</span>
                     <Link
                         href={`/category/${category}`}
-                        className="hover:text-primary transition-colors"
+                        className="hover:text-primary"
                     >
                         {formatCategoryName(category)}
                     </Link>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { ArrowUp } from "lucide-react";
 
 export default function GoToTop() {
     const [visible, setVisible] = useState(false);
@@ -20,22 +21,10 @@ export default function GoToTop() {
     return (
         <button
             onClick={scrollToTop}
-            className="fixed bottom-6 right-6 z-50 p-3 gradient-primary text-white rounded-full shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 transition-all hover:scale-110"
+            className="fixed bottom-6 right-6 z-50 p-3 gradient-primary text-white rounded-full shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 transition-shadow hover:scale-110 cursor-pointer"
             aria-label="Go to top"
         >
-            <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-            >
-                <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 10l7-7m0 0l7 7m-7-7v18"
-                />
-            </svg>
+            <ArrowUp className="w-5 h-5" />
         </button>
     );
 }

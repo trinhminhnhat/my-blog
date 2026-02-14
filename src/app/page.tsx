@@ -1,13 +1,13 @@
 import Link from "next/link";
-import { getAllPosts, getCategories, formatCategoryName, getAllTags } from "@/lib/posts";
+import { Folder } from "lucide-react";
+import { getAllPosts, getCategories, formatCategoryName } from "@/lib/posts";
 import { AUTHOR } from "@/lib/types";
 import CategorySidebar from "@/components/CategorySidebar";
-import PostListClient from "@/components/PostListClient";
+import PaginatedPosts from "@/components/PaginatedPosts";
 
 export default function HomePage() {
     const categories = getCategories();
     const allPosts = getAllPosts();
-    const allTags = getAllTags();
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-8">
@@ -25,15 +25,14 @@ export default function HomePage() {
                     <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-primary/5 -translate-y-1/2 translate-x-1/2" />
                     <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-primary/5 translate-y-1/2 -translate-x-1/2" />
                     <div className="relative">
-                        <h1 className="text-3xl md:text-4xl font-bold mb-3">
+                        <h1 className="text-3xl md:text-4xl text-center font-bold mb-3">
                             Welcome to{" "}
                             <span className="gradient-text">
                                 Nhật&apos;s Blog
                             </span>
                         </h1>
-                        <p className="text-muted text-lg max-w-2xl">
-                            Chia sẻ kiến thức về công nghệ, phỏng vấn và nhiều hơn
-                            nữa. By {AUTHOR}.
+                        <p className="text-muted text-lg max-w-2xl text-center mx-auto">
+                            Share knowledge about technology, programming expertise, and personal experiences in the IT industry. Let's learn and grow together! 🥰
                         </p>
                     </div>
                 </section>
@@ -53,12 +52,10 @@ export default function HomePage() {
                             >
                                 <div className="absolute top-0 left-0 right-0 h-1 gradient-primary opacity-60 group-hover:opacity-100 transition-opacity" />
                                 <div className="flex items-center gap-3 mb-3">
-                                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                                        <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-                                        </svg>
+                                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20">
+                                        <Folder className="w-5 h-5 text-primary" />
                                     </div>
-                                    <h3 className="font-semibold group-hover:text-primary transition-colors">
+                                    <h3 className="font-semibold group-hover:text-primary">
                                         {formatCategoryName(cat)}
                                     </h3>
                                 </div>
@@ -81,9 +78,13 @@ export default function HomePage() {
                     </div>
                 </section>
 
-                {/* Posts Section with client-side pagination & filtering */}
+                {/* Posts Section */}
                 <section>
-                    <PostListClient allPosts={allPosts} allTags={allTags} />
+                    <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                        <span className="w-1 h-6 gradient-primary rounded-full" />
+                        All Posts
+                    </h2>
+                    <PaginatedPosts allPosts={allPosts} />
                 </section>
             </div>
         </div>

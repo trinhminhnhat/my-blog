@@ -5,6 +5,7 @@ import {
     getPostsByCategory,
     formatCategoryName,
 } from "@/lib/posts";
+import { FileText } from "lucide-react";
 import CategorySidebar from "@/components/CategorySidebar";
 import PaginatedPosts from "@/components/PaginatedPosts";
 
@@ -49,7 +50,7 @@ export default async function CategoryPage({
             <div>
                 {/* Breadcrumb */}
                 <nav className="flex items-center gap-2 text-sm text-muted mb-6">
-                    <Link href="/" className="hover:text-primary transition-colors">
+                    <Link href="/" className="hover:text-primary">
                         Home
                     </Link>
                     <span className="text-primary/40">/</span>
@@ -77,12 +78,10 @@ export default async function CategoryPage({
                             >
                                 <div className="absolute top-0 left-0 right-0 h-1 gradient-primary opacity-60 group-hover:opacity-100 transition-opacity" />
                                 <div className="flex items-center gap-3 mb-2">
-                                    <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                                        <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                                        </svg>
+                                    <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20">
+                                        <FileText className="w-4 h-4 text-primary" />
                                     </div>
-                                    <h3 className="font-semibold group-hover:text-primary transition-colors">
+                                    <h3 className="font-semibold group-hover:text-primary">
                                         {formatCategoryName(sub)}
                                     </h3>
                                 </div>

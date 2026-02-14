@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { Search } from "lucide-react";
 
 export default function SearchDialog() {
     const [open, setOpen] = useState(false);
@@ -55,21 +56,9 @@ export default function SearchDialog() {
         <>
             <button
                 onClick={() => setOpen(true)}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-primary/20 text-sm text-muted hover:border-primary/40 hover:bg-primary/5 transition-all"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-primary/20 text-sm text-muted hover:border-primary/40 hover:bg-primary/5"
             >
-                <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                    />
-                </svg>
+                <Search className="w-4 h-4" />
                 <span className="hidden sm:inline">Search...</span>
                 <kbd className="hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-xs bg-surface rounded border border-border">
                     <span className="text-xs">⌘</span>K

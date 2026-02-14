@@ -12,14 +12,14 @@ export default function PostCard({ post }: PostCardProps) {
             <div className="flex items-center gap-2 text-xs text-muted mb-3">
                 <Link
                     href={`/category/${post.category}`}
-                    className="bg-primary/10 text-primary font-medium px-2.5 py-1 rounded-full hover:bg-primary/20 transition-colors"
+                    className="bg-primary/10 text-primary font-medium px-2.5 py-1 rounded-full hover:bg-primary/20"
                 >
                     {formatCategoryName(post.category)}
                 </Link>
                 <span className="text-primary/40">/</span>
                 <Link
                     href={`/category/${post.category}/${post.subcategory}`}
-                    className="hover:text-primary transition-colors"
+                    className="hover:text-primary"
                 >
                     {formatCategoryName(post.subcategory)}
                 </Link>
@@ -30,7 +30,7 @@ export default function PostCard({ post }: PostCardProps) {
             <Link
                 href={`/post/${post.category}/${post.subcategory}/${post.slug}`}
             >
-                <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
+                <h3 className="text-lg font-semibold mb-2 group-hover:text-primary">
                     {post.frontmatter.title}
                 </h3>
             </Link>

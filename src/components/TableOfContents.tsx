@@ -42,7 +42,7 @@ export default function TableOfContents({ items }: TableOfContentsProps) {
                 <a
                     key={item.id}
                     href={`#${item.id}`}
-                    className={`block text-sm py-1 transition-colors border-l-2 ${
+                    className={`block text-sm py-1 border-l-2 ${
                         activeId === item.id
                             ? "border-primary text-primary font-medium"
                             : "border-transparent text-muted hover:text-foreground hover:border-border"

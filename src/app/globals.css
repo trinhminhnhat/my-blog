@@ -43,7 +43,6 @@ body {
     background: var(--bg);
     color: var(--fg);
     font-family: var(--font-sans);
-    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* ========== Card Styles ========== */
@@ -52,7 +51,9 @@ body {
     border: 1px solid var(--border-color);
     border-radius: 16px;
     box-shadow: var(--card-shadow);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .card:hover {
@@ -109,7 +110,6 @@ body {
     color: #38bdf8;
     text-decoration: none;
     border-bottom: 1px solid rgba(56, 189, 248, 0.3);
-    transition: border-color 0.2s;
 }
 
 .prose a:hover {
