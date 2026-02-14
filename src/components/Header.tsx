@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { formatCategoryName } from "@/lib/utils";
@@ -14,6 +15,12 @@ interface HeaderProps {
 
 export default function Header({ categories }: HeaderProps) {
     const [menuOpen, setMenuOpen] = useState(false);
+    const pathname = usePathname();
+
+    const isActive = (href: string) => {
+        if (href === "/") return pathname === "/";
+        return pathname.startsWith(href);
+    };
 
     return (
         <header className="sticky top-0 z-40 bg-background/90 backdrop-blur-xl border-b border-primary/20 shadow-[0_1px_8px_rgba(56,189,248,0.08)]">
@@ -30,7 +37,9 @@ export default function Header({ categories }: HeaderProps) {
                 <nav className="hidden md:flex items-center gap-1">
                     <Link
                         href="/"
-                        className="px-3 py-2 rounded-lg text-sm font-medium hover:bg-primary/10 hover:text-primary"
+                        className={`px-3 py-2 rounded-lg text-sm font-medium hover:bg-primary/10 hover:text-primary ${
+                            isActive("/") ? "bg-primary/15 text-primary" : ""
+                        }`}
                     >
                         Home
                     </Link>
@@ -38,19 +47,23 @@ export default function Header({ categories }: HeaderProps) {
                         <div key={cat} className="relative group">
                             <Link
                                 href={`/category/${cat}`}
-                                className="px-3 py-2 rounded-lg text-sm font-medium hover:bg-primary/10 hover:text-primary"
+                                className={`px-3 py-2 rounded-lg text-sm font-medium hover:bg-primary/10 hover:text-primary ${
+                                    isActive(`/category/${cat}`) ? "bg-primary/15 text-primary" : ""
+                                }`}
                             >
                                 {formatCategoryName(cat)}
                             </Link>
                             {subs.length > 0 && (
                                 <div className="absolute top-full left-0 pt-2 hidden group-hover:block">
-                                    <div className="bg-background border border-primary/20 rounded-xl shadow-xl py-2 min-w-[200px] overflow-hidden">
+                                    <div className="bg-background border border-primary/20 rounded-xl shadow-xl py-2 min-w-50 overflow-hidden">
                                         <div className="h-0.5 gradient-primary" />
                                         {subs.map((sub) => (
                                             <Link
                                                 key={sub}
                                                 href={`/category/${cat}/${sub}`}
-                                                className="block px-4 py-2.5 text-sm hover:bg-primary/10 hover:text-primary"
+                                                className={`block px-4 py-2.5 text-sm hover:bg-primary/10 hover:text-primary ${
+                                                    isActive(`/category/${cat}/${sub}`) ? "bg-primary/15 text-primary font-medium" : ""
+                                                }`}
                                             >
                                                 {formatCategoryName(sub)}
                                             </Link>
@@ -82,7 +95,9 @@ export default function Header({ categories }: HeaderProps) {
                     <nav className="px-4 py-3 space-y-1">
                         <Link
                             href="/"
-                            className="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-primary/10 hover:text-primary"
+                            className={`block px-3 py-2 rounded-lg text-sm font-medium hover:bg-primary/10 hover:text-primary ${
+                                isActive("/") ? "bg-primary/15 text-primary" : ""
+                            }`}
                             onClick={() => setMenuOpen(false)}
                         >
                             Home
@@ -91,7 +106,9 @@ export default function Header({ categories }: HeaderProps) {
                             <div key={cat}>
                                 <Link
                                     href={`/category/${cat}`}
-                                    className="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-primary/10 hover:text-primary"
+                                    className={`block px-3 py-2 rounded-lg text-sm font-medium hover:bg-primary/10 hover:text-primary ${
+                                        isActive(`/category/${cat}`) ? "bg-primary/15 text-primary" : ""
+                                    }`}
                                     onClick={() => setMenuOpen(false)}
                                 >
                                     {formatCategoryName(cat)}
@@ -100,7 +117,9 @@ export default function Header({ categories }: HeaderProps) {
                                     <Link
                                         key={sub}
                                         href={`/category/${cat}/${sub}`}
-                                        className="block px-6 py-1.5 text-sm text-muted hover:text-primary"
+                                        className={`block px-6 py-1.5 text-sm hover:text-primary ${
+                                            isActive(`/category/${cat}/${sub}`) ? "text-primary font-medium bg-primary/8" : "text-muted"
+                                        }`}
                                         onClick={() => setMenuOpen(false)}
                                     >
                                         {formatCategoryName(sub)}

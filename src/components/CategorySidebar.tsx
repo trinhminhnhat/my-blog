@@ -79,16 +79,14 @@ export default function CategorySidebar({
                         )}
                         <Link
                             href={`/category/${cat}`}
-                            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium flex-1 ${
-                                currentCategory === cat && !currentSubcategory
-                                    ? "bg-primary/15 text-primary shadow-sm"
-                                    : "hover:bg-primary/8 hover:text-primary"
-                            }`}
+                            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium flex-1 ${currentCategory === cat && !currentSubcategory
+                                ? "bg-primary/15 text-primary shadow-sm"
+                                : "hover:bg-primary/8 hover:text-primary"
+                                }`}
                         >
                             <Folder
-                                className={`w-4 h-4 shrink-0 ${
-                                    currentCategory === cat ? "text-primary" : "text-muted"
-                                }`}
+                                className={`w-4 h-4 shrink-0 ${currentCategory === cat ? "text-primary" : "text-muted"
+                                    }`}
                             />
                             {formatCategoryName(cat)}
                         </Link>
@@ -99,12 +97,11 @@ export default function CategorySidebar({
                                 <Link
                                     key={sub}
                                     href={`/category/${cat}/${sub}`}
-                                    className={`block px-2 py-1.5 rounded text-sm ${
-                                        currentCategory === cat &&
+                                    className={`block px-2 py-1.5 rounded text-sm ${currentCategory === cat &&
                                         currentSubcategory === sub
-                                            ? "text-primary font-medium bg-primary/8"
-                                            : "text-muted hover:text-primary"
-                                    }`}
+                                        ? "text-primary font-medium bg-primary/8"
+                                        : "text-muted hover:text-primary"
+                                        }`}
                                 >
                                     {formatCategoryName(sub)}
                                 </Link>

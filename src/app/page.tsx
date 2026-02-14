@@ -1,9 +1,9 @@
-import Link from "next/link";
 import { Folder } from "lucide-react";
-import { getAllPosts, getCategories, formatCategoryName } from "@/lib/posts";
-import { AUTHOR } from "@/lib/types";
+import Link from "next/link";
+
 import CategorySidebar from "@/components/CategorySidebar";
 import PaginatedPosts from "@/components/PaginatedPosts";
+import { formatCategoryName, getAllPosts, getCategories } from "@/lib/posts";
 
 export default function HomePage() {
     const categories = getCategories();
@@ -64,7 +64,7 @@ export default function HomePage() {
                                     {subs.length === 1 ? "y" : "ies"}
                                 </p>
                                 <div className="flex flex-wrap gap-1">
-                                    {subs.map((sub) => (
+                                    {subs.slice(0, 2).map((sub) => (
                                         <span
                                             key={sub}
                                             className="text-xs bg-primary/8 text-primary/80 px-2 py-0.5 rounded-full"
@@ -72,6 +72,11 @@ export default function HomePage() {
                                             {formatCategoryName(sub)}
                                         </span>
                                     ))}
+                                    {subs.length > 2 && (
+                                        <span className="text-xs bg-primary/15 text-primary font-medium px-2 py-0.5 rounded-full">
+                                            +{subs.length - 2} more
+                                        </span>
+                                    )}
                                 </div>
                             </Link>
                         ))}

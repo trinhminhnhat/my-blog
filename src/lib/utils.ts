@@ -6,7 +6,7 @@ export function formatCategoryName(slug: string): string {
 }
 
 export function formatDate(dateString: string): string {
-    return new Date(dateString).toLocaleDateString("vi-VN", {
+    return new Date(dateString).toLocaleDateString("en-US", {
         year: "numeric",
         month: "long",
         day: "numeric",
