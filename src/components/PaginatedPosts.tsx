@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { Search, X, ChevronUp, ChevronDown, Check, ChevronsUpDown } from "lucide-react";
 import type { PostMeta } from "@/lib/types";
 import { POSTS_PER_PAGE } from "@/lib/types";
@@ -17,6 +17,7 @@ export default function PaginatedPosts({ allPosts }: PaginatedPostsProps) {
     const [sortBy, setSortBy] = useState<"date" | "title" | "description">("date");
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
     const [tagsExpanded, setTagsExpanded] = useState(false);
+    const postsTopRef = useRef<HTMLDivElement>(null);
 
     const MAX_VISIBLE_TAGS = 10;
 
@@ -80,10 +81,17 @@ export default function PaginatedPosts({ allPosts }: PaginatedPostsProps) {
         setPage(1);
     };
 
+    const handlePageChange = (newPage: number) => {
+        setPage(newPage);
+        setTimeout(() => {
+            postsTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 0);
+    };
+
     return (
         <>
             {/* Filter Bar */}
-            <div className="mb-6 space-y-3">
+            <div ref={postsTopRef} className="mb-6 space-y-3 scroll-mt-30">
                 {/* Search + Sort row */}
                 <div className="flex items-center gap-2">
                     <div className="relative flex-1">
@@ -256,7 +264,7 @@ export default function PaginatedPosts({ allPosts }: PaginatedPostsProps) {
                 <nav className="flex items-center justify-center gap-2 mt-8">
                     {page > 1 && (
                         <button
-                            onClick={() => setPage(page - 1)}
+                            onClick={() => handlePageChange(page - 1)}
                             className="px-3 py-2 rounded-lg border border-primary/20 hover:bg-primary/10 hover:border-primary/40 text-sm cursor-pointer"
                         >
                             ← Prev
@@ -266,7 +274,7 @@ export default function PaginatedPosts({ allPosts }: PaginatedPostsProps) {
                         (p) => (
                             <button
                                 key={p}
-                                onClick={() => setPage(p)}
+                                onClick={() => handlePageChange(p)}
                                 className={`px-3 py-2 rounded-lg text-sm cursor-pointer ${
                                     p === page
                                         ? "gradient-primary text-white shadow-md shadow-primary/25"
@@ -279,7 +287,7 @@ export default function PaginatedPosts({ allPosts }: PaginatedPostsProps) {
                     )}
                     {page < totalPages && (
                         <button
-                            onClick={() => setPage(page + 1)}
+                            onClick={() => handlePageChange(page + 1)}
                             className="px-3 py-2 rounded-lg border border-primary/20 hover:bg-primary/10 hover:border-primary/40 text-sm cursor-pointer"
                         >
                             Next →
