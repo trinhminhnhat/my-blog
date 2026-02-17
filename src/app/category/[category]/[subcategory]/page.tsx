@@ -8,7 +8,7 @@ import {
 import CategorySidebar from "@/components/CategorySidebar";
 import PaginatedPosts from "@/components/PaginatedPosts";
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
     const categories = getCategories();
     const params: { category: string; subcategory: string }[] = [];
 

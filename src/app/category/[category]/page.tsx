@@ -9,7 +9,7 @@ import { FileText } from "lucide-react";
 import CategorySidebar from "@/components/CategorySidebar";
 import PaginatedPosts from "@/components/PaginatedPosts";
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
     const categories = getCategories();
     return Object.keys(categories).map((category) => ({ category }));
 }

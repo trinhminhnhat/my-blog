@@ -13,7 +13,7 @@ import { AUTHOR } from "@/lib/types";
 import CategorySidebar from "@/components/CategorySidebar";
 import TableOfContents from "@/components/TableOfContents";
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
     const posts = getAllPosts();
     return posts.map((p) => ({
         category: p.category,

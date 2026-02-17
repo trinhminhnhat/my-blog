@@ -39,7 +39,7 @@ export default function RootLayout({
     const categories = getCategories();
 
     return (
-        <html lang="vi" suppressHydrationWarning>
+        <html lang="en" suppressHydrationWarning>
             <head>
                 <script
                     dangerouslySetInnerHTML={{
