@@ -38,6 +38,7 @@ export interface PaginationInfo {
 
 export const POSTS_PER_PAGE = 5;
 export const SITE_TITLE = "Nhật's Blog";
-export const SITE_DESCRIPTION = "A blog about technology, programming, and IT industry insights by Trịnh Minh Nhật.";
+export const SITE_DESCRIPTION =
+    "A blog about technology, programming, and IT industry insights by Trịnh Minh Nhật.";
 export const SITE_URL = "https://blog.trinhminhnhat.com";
 export const AUTHOR = "Trịnh Minh Nhật";

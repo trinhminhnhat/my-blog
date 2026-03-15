@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { formatCategoryName } from "@/lib/utils";
+import { cn, formatCategoryName } from "@/lib/utils";
 import type { CategoryTree } from "@/lib/types";
 import ThemeToggle from "./ThemeToggle";
 import SearchDialog from "./SearchDialog";
@@ -37,9 +37,10 @@ export default function Header({ categories }: HeaderProps) {
                 <nav className="hidden md:flex items-center gap-1">
                     <Link
                         href="/"
-                        className={`px-3 py-2 rounded-lg text-sm font-medium hover:bg-primary/10 hover:text-primary ${
-                            isActive("/") ? "bg-primary/15 text-primary" : ""
-                        }`}
+                        className={cn(
+                            "px-3 py-2 rounded-lg text-sm font-medium hover:bg-primary/10 hover:text-primary",
+                            isActive("/") && "bg-primary/15 text-primary"
+                        )}
                     >
                         Home
                     </Link>
@@ -47,9 +48,11 @@ export default function Header({ categories }: HeaderProps) {
                         <div key={cat} className="relative group">
                             <Link
                                 href={`/category/${cat}`}
-                                className={`px-3 py-2 rounded-lg text-sm font-medium hover:bg-primary/10 hover:text-primary ${
-                                    isActive(`/category/${cat}`) ? "bg-primary/15 text-primary" : ""
-                                }`}
+                                className={cn(
+                                    "px-3 py-2 rounded-lg text-sm font-medium hover:bg-primary/10 hover:text-primary",
+                                    isActive(`/category/${cat}`) &&
+                                        "bg-primary/15 text-primary"
+                                )}
                             >
                                 {formatCategoryName(cat)}
                             </Link>
@@ -61,9 +64,13 @@ export default function Header({ categories }: HeaderProps) {
                                             <Link
                                                 key={sub}
                                                 href={`/category/${cat}/${sub}`}
-                                                className={`block px-4 py-2.5 text-sm hover:bg-primary/10 hover:text-primary ${
-                                                    isActive(`/category/${cat}/${sub}`) ? "bg-primary/15 text-primary font-medium" : ""
-                                                }`}
+                                                className={cn(
+                                                    "block px-4 py-2.5 text-sm hover:bg-primary/10 hover:text-primary",
+                                                    isActive(
+                                                        `/category/${cat}/${sub}`
+                                                    ) &&
+                                                        "bg-primary/15 text-primary font-medium"
+                                                )}
                                             >
                                                 {formatCategoryName(sub)}
                                             </Link>
@@ -84,7 +91,11 @@ export default function Header({ categories }: HeaderProps) {
                         className="md:hidden p-2 rounded-lg hover:bg-surface-hover"
                         aria-label="Toggle menu"
                     >
-                        {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                        {menuOpen ? (
+                            <X className="w-5 h-5" />
+                        ) : (
+                            <Menu className="w-5 h-5" />
+                        )}
                     </button>
                 </div>
             </div>
@@ -95,9 +106,10 @@ export default function Header({ categories }: HeaderProps) {
                     <nav className="px-4 py-3 space-y-1">
                         <Link
                             href="/"
-                            className={`block px-3 py-2 rounded-lg text-sm font-medium hover:bg-primary/10 hover:text-primary ${
-                                isActive("/") ? "bg-primary/15 text-primary" : ""
-                            }`}
+                            className={cn(
+                                "block px-3 py-2 rounded-lg text-sm font-medium hover:bg-primary/10 hover:text-primary",
+                                isActive("/") && "bg-primary/15 text-primary"
+                            )}
                             onClick={() => setMenuOpen(false)}
                         >
                             Home
@@ -106,9 +118,11 @@ export default function Header({ categories }: HeaderProps) {
                             <div key={cat}>
                                 <Link
                                     href={`/category/${cat}`}
-                                    className={`block px-3 py-2 rounded-lg text-sm font-medium hover:bg-primary/10 hover:text-primary ${
-                                        isActive(`/category/${cat}`) ? "bg-primary/15 text-primary" : ""
-                                    }`}
+                                    className={cn(
+                                        "block px-3 py-2 rounded-lg text-sm font-medium hover:bg-primary/10 hover:text-primary",
+                                        isActive(`/category/${cat}`) &&
+                                            "bg-primary/15 text-primary"
+                                    )}
                                     onClick={() => setMenuOpen(false)}
                                 >
                                     {formatCategoryName(cat)}
@@ -117,9 +131,12 @@ export default function Header({ categories }: HeaderProps) {
                                     <Link
                                         key={sub}
                                         href={`/category/${cat}/${sub}`}
-                                        className={`block px-6 py-1.5 text-sm hover:text-primary ${
-                                            isActive(`/category/${cat}/${sub}`) ? "text-primary font-medium bg-primary/8" : "text-muted"
-                                        }`}
+                                        className={cn(
+                                            "block px-6 py-1.5 text-sm hover:text-primary",
+                                            isActive(`/category/${cat}/${sub}`)
+                                                ? "text-primary font-medium bg-primary/8"
+                                                : "text-muted"
+                                        )}
                                         onClick={() => setMenuOpen(false)}
                                     >
                                         {formatCategoryName(sub)}

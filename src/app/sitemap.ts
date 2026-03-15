@@ -15,20 +15,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: 0.8,
     }));
 
-    const categoryUrls: MetadataRoute.Sitemap = Object.entries(categories).flatMap(
-        ([cat, subs]) => [
-            {
-                url: `${SITE_URL}/category/${cat}`,
-                changeFrequency: "weekly" as const,
-                priority: 0.6,
-            },
-            ...subs.map((sub) => ({
-                url: `${SITE_URL}/category/${cat}/${sub}`,
-                changeFrequency: "weekly" as const,
-                priority: 0.5,
-            })),
-        ]
-    );
+    const categoryUrls: MetadataRoute.Sitemap = Object.entries(
+        categories
+    ).flatMap(([cat, subs]) => [
+        {
+            url: `${SITE_URL}/category/${cat}`,
+            changeFrequency: "weekly" as const,
+            priority: 0.6,
+        },
+        ...subs.map((sub) => ({
+            url: `${SITE_URL}/category/${cat}/${sub}`,
+            changeFrequency: "weekly" as const,
+            priority: 0.5,
+        })),
+    ]);
 
     return [
         {

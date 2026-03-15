@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Home, Search } from "lucide-react";
+import { Home } from "lucide-react";
 
 export default function NotFound() {
     return (
@@ -17,7 +17,8 @@ export default function NotFound() {
                 Page Not Found
             </h2>
             <p className="text-muted text-lg max-w-md mb-8">
-                The page you&apos;re looking for doesn&apos;t exist or has been moved.
+                The page you&apos;re looking for doesn&apos;t exist or has been
+                moved.
             </p>
 
             {/* Action */}

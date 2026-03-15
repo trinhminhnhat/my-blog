@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import fs from "fs";
 import path from "path";
+import matter from "gray-matter";
 
 const CONTENT_DIR = path.join(process.cwd(), "content");
 
@@ -11,7 +12,9 @@ describe("content directory structure", () => {
 
     it("should have category directories", () => {
         const categories = fs.readdirSync(CONTENT_DIR, { withFileTypes: true });
-        const dirs = categories.filter((d) => d.isDirectory()).map((d) => d.name);
+        const dirs = categories
+            .filter((d) => d.isDirectory())
+            .map((d) => d.name);
         expect(dirs).toContain("technical");
         expect(dirs).toContain("interviews");
     });
@@ -47,8 +50,6 @@ describe("content directory structure", () => {
     });
 
     it("all markdown files should have valid frontmatter", () => {
-        const matter = require("gray-matter");
-
         const walkDir = (dir: string): string[] => {
             const files: string[] = [];
             const entries = fs.readdirSync(dir, { withFileTypes: true });

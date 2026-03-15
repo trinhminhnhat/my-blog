@@ -32,7 +32,9 @@ export default function HomePage() {
                             </span>
                         </h1>
                         <p className="text-muted text-lg max-w-2xl text-center mx-auto">
-                            Share knowledge about technology, programming expertise, and personal experiences in the IT industry. Let's learn and grow together! 🥰
+                            Share knowledge about technology, programming
+                            expertise, and personal experiences in the IT
+                            industry. Let&apos;s learn and grow together! 🥰
                         </p>
                     </div>
                 </section>

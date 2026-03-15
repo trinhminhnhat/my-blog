@@ -1,7 +1,15 @@
 "use client";
 
 import { useState, useMemo, useRef } from "react";
-import { Search, X, ChevronUp, ChevronDown, Check, ChevronsUpDown } from "lucide-react";
+import {
+    Search,
+    X,
+    ChevronUp,
+    ChevronDown,
+    Check,
+    ChevronsUpDown,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 import type { PostMeta } from "@/lib/types";
 import { POSTS_PER_PAGE } from "@/lib/types";
 import PostCard from "./PostCard";
@@ -14,7 +22,9 @@ export default function PaginatedPosts({ allPosts }: PaginatedPostsProps) {
     const [page, setPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
-    const [sortBy, setSortBy] = useState<"date" | "title" | "description">("date");
+    const [sortBy, setSortBy] = useState<"date" | "title" | "description">(
+        "date"
+    );
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
     const [tagsExpanded, setTagsExpanded] = useState(false);
     const postsTopRef = useRef<HTMLDivElement>(null);
@@ -48,11 +58,15 @@ export default function PaginatedPosts({ allPosts }: PaginatedPostsProps) {
         result = [...result].sort((a, b) => {
             let cmp = 0;
             if (sortBy === "date") {
-                cmp = new Date(a.frontmatter.date).getTime() - new Date(b.frontmatter.date).getTime();
+                cmp =
+                    new Date(a.frontmatter.date).getTime() -
+                    new Date(b.frontmatter.date).getTime();
             } else if (sortBy === "title") {
                 cmp = a.frontmatter.title.localeCompare(b.frontmatter.title);
             } else {
-                cmp = a.frontmatter.description.localeCompare(b.frontmatter.description);
+                cmp = a.frontmatter.description.localeCompare(
+                    b.frontmatter.description
+                );
             }
             return sortOrder === "asc" ? cmp : -cmp;
         });
@@ -84,7 +98,10 @@ export default function PaginatedPosts({ allPosts }: PaginatedPostsProps) {
     const handlePageChange = (newPage: number) => {
         setPage(newPage);
         setTimeout(() => {
-            postsTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+            postsTopRef.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            });
         }, 0);
     };
 
@@ -119,30 +136,45 @@ export default function PaginatedPosts({ allPosts }: PaginatedPostsProps) {
                         )}
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
-                        {(["title", "description", "date"] as const).map((field) => (
-                            <button
-                                key={field}
-                                onClick={() => {
-                                    if (sortBy === field) {
-                                        setSortOrder((o) => (o === "asc" ? "desc" : "asc"));
-                                    } else {
-                                        setSortBy(field);
-                                        setSortOrder(field === "date" ? "desc" : "asc");
-                                    }
-                                    setPage(1);
-                                }}
-                                className={`text-xs px-2 py-2 rounded-lg cursor-pointer inline-flex items-center gap-0.5 ${
-                                    sortBy === field
-                                        ? "gradient-primary text-white shadow-sm shadow-primary/25"
-                                        : "border border-border text-muted hover:bg-primary/10 hover:text-primary hover:border-primary/30"
-                                }`}
-                            >
-                                {field === "description" ? "Desc" : field.charAt(0).toUpperCase() + field.slice(1)}
-                                {sortBy === field && (
-                                    sortOrder === "asc" ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />
-                                )}
-                            </button>
-                        ))}
+                        {(["title", "description", "date"] as const).map(
+                            (field) => (
+                                <button
+                                    key={field}
+                                    onClick={() => {
+                                        if (sortBy === field) {
+                                            setSortOrder((o) =>
+                                                o === "asc" ? "desc" : "asc"
+                                            );
+                                        } else {
+                                            setSortBy(field);
+                                            setSortOrder(
+                                                field === "date"
+                                                    ? "desc"
+                                                    : "asc"
+                                            );
+                                        }
+                                        setPage(1);
+                                    }}
+                                    className={cn(
+                                        "text-xs px-2 py-2 rounded-lg cursor-pointer inline-flex items-center gap-0.5",
+                                        sortBy === field
+                                            ? "gradient-primary text-white shadow-sm shadow-primary/25"
+                                            : "border border-border text-muted hover:bg-primary/10 hover:text-primary hover:border-primary/30"
+                                    )}
+                                >
+                                    {field === "description"
+                                        ? "Desc"
+                                        : field.charAt(0).toUpperCase() +
+                                          field.slice(1)}
+                                    {sortBy === field &&
+                                        (sortOrder === "asc" ? (
+                                            <ChevronUp className="w-3 h-3" />
+                                        ) : (
+                                            <ChevronDown className="w-3 h-3" />
+                                        ))}
+                                </button>
+                            )
+                        )}
                     </div>
                 </div>
 
@@ -173,7 +205,9 @@ export default function PaginatedPosts({ allPosts }: PaginatedPostsProps) {
                                 )}
                                 {allTags.length > MAX_VISIBLE_TAGS && (
                                     <button
-                                        onClick={() => setTagsExpanded(!tagsExpanded)}
+                                        onClick={() =>
+                                            setTagsExpanded(!tagsExpanded)
+                                        }
                                         className="text-xs text-muted hover:text-primary cursor-pointer flex items-center gap-0.5"
                                     >
                                         <ChevronsUpDown className="w-3.5 h-3.5" />
@@ -201,15 +235,25 @@ export default function PaginatedPosts({ allPosts }: PaginatedPostsProps) {
 
                         {/* All tags / collapsed tags */}
                         <div className="flex flex-wrap gap-1.5">
-                            {(tagsExpanded ? allTags : allTags.filter((t) => selectedTags.includes(t) ? false : true).slice(0, MAX_VISIBLE_TAGS)).map((tag) => (
+                            {(tagsExpanded
+                                ? allTags
+                                : allTags
+                                      .filter((t) =>
+                                          selectedTags.includes(t)
+                                              ? false
+                                              : true
+                                      )
+                                      .slice(0, MAX_VISIBLE_TAGS)
+                            ).map((tag) => (
                                 <button
                                     key={tag}
                                     onClick={() => handleTagClick(tag)}
-                                    className={`text-xs px-2.5 py-1 rounded-full cursor-pointer inline-flex items-center gap-1 ${
+                                    className={cn(
+                                        "text-xs px-2.5 py-1 rounded-full cursor-pointer inline-flex items-center gap-1",
                                         selectedTags.includes(tag)
                                             ? "gradient-primary text-white shadow-md shadow-primary/25"
                                             : "bg-primary/8 text-muted hover:bg-primary/15 hover:text-primary"
-                                    }`}
+                                    )}
                                 >
                                     #{tag}
                                     {selectedTags.includes(tag) && (
@@ -217,14 +261,24 @@ export default function PaginatedPosts({ allPosts }: PaginatedPostsProps) {
                                     )}
                                 </button>
                             ))}
-                            {!tagsExpanded && allTags.length > MAX_VISIBLE_TAGS + selectedTags.length && (
-                                <button
-                                    onClick={() => setTagsExpanded(true)}
-                                    className="text-xs px-2.5 py-1 rounded-full cursor-pointer border border-dashed border-primary/30 text-primary hover:bg-primary/8"
-                                >
-                                    +{allTags.length - MAX_VISIBLE_TAGS - selectedTags.filter((t) => allTags.indexOf(t) >= MAX_VISIBLE_TAGS).length} more
-                                </button>
-                            )}
+                            {!tagsExpanded &&
+                                allTags.length >
+                                    MAX_VISIBLE_TAGS + selectedTags.length && (
+                                    <button
+                                        onClick={() => setTagsExpanded(true)}
+                                        className="text-xs px-2.5 py-1 rounded-full cursor-pointer border border-dashed border-primary/30 text-primary hover:bg-primary/8"
+                                    >
+                                        +
+                                        {allTags.length -
+                                            MAX_VISIBLE_TAGS -
+                                            selectedTags.filter(
+                                                (t) =>
+                                                    allTags.indexOf(t) >=
+                                                    MAX_VISIBLE_TAGS
+                                            ).length}{" "}
+                                        more
+                                    </button>
+                                )}
                         </div>
                     </div>
                 )}
@@ -234,7 +288,8 @@ export default function PaginatedPosts({ allPosts }: PaginatedPostsProps) {
             {hasFilters && (
                 <div className="flex items-center justify-between mb-4">
                     <p className="text-sm text-muted">
-                        {filteredPosts.length} post{filteredPosts.length !== 1 ? "s" : ""} found
+                        {filteredPosts.length} post
+                        {filteredPosts.length !== 1 ? "s" : ""} found
                     </p>
                 </div>
             )}
@@ -275,11 +330,12 @@ export default function PaginatedPosts({ allPosts }: PaginatedPostsProps) {
                             <button
                                 key={p}
                                 onClick={() => handlePageChange(p)}
-                                className={`px-3 py-2 rounded-lg text-sm cursor-pointer ${
+                                className={cn(
+                                    "px-3 py-2 rounded-lg text-sm cursor-pointer",
                                     p === page
                                         ? "gradient-primary text-white shadow-md shadow-primary/25"
                                         : "border border-primary/20 hover:bg-primary/10 hover:border-primary/40"
-                                }`}
+                                )}
                             >
                                 {p}
                             </button>

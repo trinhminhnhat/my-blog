@@ -11,13 +11,13 @@
  *   node scripts/new-post.mjs interviews frontend typescript-tips
  */
 
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import readline from 'readline';
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import readline from "readline";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const CONTENT_DIR = path.join(__dirname, '..', 'content');
+const CONTENT_DIR = path.join(__dirname, "..", "content");
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -41,9 +41,9 @@ async function main() {
             : [];
 
         if (existing.length > 0) {
-            console.log('\nExisting categories:', existing.join(', '));
+            console.log("\nExisting categories:", existing.join(", "));
         }
-        category = await ask('Category (e.g., technical): ');
+        category = await ask("Category (e.g., technical): ");
     }
 
     if (!subcategory) {
@@ -56,29 +56,29 @@ async function main() {
             : [];
 
         if (existing.length > 0) {
-            console.log('\nExisting subcategories:', existing.join(', '));
+            console.log("\nExisting subcategories:", existing.join(", "));
         }
-        subcategory = await ask('Subcategory (e.g., system-design): ');
+        subcategory = await ask("Subcategory (e.g., system-design): ");
     }
 
     if (!slug) {
-        slug = await ask('Post slug (e.g., my-new-post): ');
+        slug = await ask("Post slug (e.g., my-new-post): ");
     }
 
-    const title = await ask('Title: ');
-    const description = await ask('Description: ');
-    const tagsInput = await ask('Tags (comma-separated): ');
+    const title = await ask("Title: ");
+    const description = await ask("Description: ");
+    const tagsInput = await ask("Tags (comma-separated): ");
     const tags = tagsInput
-        .split(',')
+        .split(",")
         .map((t) => t.trim())
         .filter(Boolean);
 
-    const today = new Date().toISOString().split('T')[0];
+    const today = new Date().toISOString().split("T")[0];
 
     const frontmatter = `---
 title: "${title}"
 date: "${today}"
-tags: [${tags.map((t) => `"${t}"`).join(', ')}]
+tags: [${tags.map((t) => `"${t}"`).join(", ")}]
 description: "${description}"
 ---
 
@@ -88,7 +88,7 @@ Write your content here...
 `;
 
     // Sanitize inputs for path traversal protection
-    const sanitize = (str) => str.replace(/[^a-zA-Z0-9_-]/g, '');
+    const sanitize = (str) => str.replace(/[^a-zA-Z0-9_-]/g, "");
     const safeCategory = sanitize(category);
     const safeSubcategory = sanitize(subcategory);
     const safeSlug = sanitize(slug);
@@ -103,7 +103,7 @@ Write your content here...
     }
 
     fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(filePath, frontmatter, 'utf-8');
+    fs.writeFileSync(filePath, frontmatter, "utf-8");
 
     console.log(`\n✅ Created: ${filePath}`);
     console.log(`📂 Category: ${safeCategory} → ${safeSubcategory}`);

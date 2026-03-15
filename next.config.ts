@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
     images: {
         unoptimized: true,
     },
+    sassOptions: {
+        silenceDeprecations: ["import"],
+    },
 };
 
 export default nextConfig;

@@ -16,8 +16,7 @@ const CONTENT_DIR = path.join(__dirname, "..", "content");
 const OUT_DIR = path.join(__dirname, "..", "out");
 
 const SITE_TITLE = "Nhật's Blog";
-const SITE_DESCRIPTION =
-    "A blog about technology, interviews, and more";
+const SITE_DESCRIPTION = "A blog about technology, interviews, and more";
 const SITE_URL = "https://nhattm.dev";
 const AUTHOR = "Trịnh Minh Nhật";
 

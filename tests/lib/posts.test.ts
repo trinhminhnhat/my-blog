@@ -110,7 +110,11 @@ describe("extractTOC", () => {
         expect(toc).toHaveLength(3);
         expect(toc[0]).toEqual({ id: "intro", text: "Introduction", level: 2 });
         expect(toc[1]).toEqual({ id: "sub", text: "Subsection", level: 3 });
-        expect(toc[2]).toEqual({ id: "conclusion", text: "Conclusion", level: 2 });
+        expect(toc[2]).toEqual({
+            id: "conclusion",
+            text: "Conclusion",
+            level: 2,
+        });
     });
 
     it("should return empty array for content without headings", () => {

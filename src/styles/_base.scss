@@ -1,0 +1,25 @@
+body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(56, 189, 248, 0.25);
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(56, 189, 248, 0.5);
+}
+
+::selection {
+    background: rgba(56, 189, 248, 0.25);
+    color: inherit;
+}
