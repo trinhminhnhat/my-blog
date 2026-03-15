@@ -247,27 +247,6 @@ body {
     padding-bottom: 8px;
 }
 
-.search-container::-webkit-scrollbar {
-    width: 10px;
-}
-
-.search-container::-webkit-scrollbar-track {
-    background: transparent;
-    margin: 8px 0;
-}
-
-.search-container::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, rgba(56, 189, 248, 0.25), rgba(56, 189, 248, 0.15));
-    border-radius: 5px;
-    border: 2px solid transparent;
-    background-clip: padding-box;
-}
-
-.search-container::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, rgba(56, 189, 248, 0.4), rgba(56, 189, 248, 0.3));
-    background-clip: padding-box;
-}
-
 @keyframes fade-in {
     from { opacity: 0; }
     to { opacity: 1; }
