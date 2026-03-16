@@ -191,6 +191,7 @@ export default function SearchDialog() {
                 onClick={() => setOpen(true)}
                 className="group relative flex items-center gap-2.5 px-4 py-2 rounded-xl border border-border text-sm text-muted
                          hover:border-primary hover:text-primary
+                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:border-primary
                          transition-all duration-200"
             >
                 <Search className="w-4 h-4" />
@@ -270,7 +271,7 @@ export default function SearchDialog() {
                                                         setQuery("");
                                                         inputRef.current?.focus();
                                                     }}
-                                                    className="text-muted/40 hover:text-muted transition-colors text-xs px-1.5 py-0.5 rounded hover:bg-surface-hover"
+                                                    className="text-muted/40 hover:text-muted transition-colors text-xs px-1.5 py-0.5 rounded hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
                                                 >
                                                     Clear
                                                 </button>

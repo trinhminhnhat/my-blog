@@ -1,3 +1,9 @@
+/* ========== Input focus suppression ========== */
+
+.search-dialog input:focus-visible {
+    outline: none;
+}
+
 /* ========== Search Dialog Shell ========== */
 
 .search-dialog {
