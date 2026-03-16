@@ -120,6 +120,26 @@
     box-shadow: var(--card-shadow);
 }
 
+.prose picture {
+    display: block;
+    margin: 1.5em 0;
+}
+
+.prose picture img {
+    margin: 0;
+}
+
+.prose figure {
+    margin: 1.5em 0;
+    text-align: center;
+}
+
+.prose figcaption {
+    font-size: 0.875em;
+    color: var(--muted);
+    margin-top: 0.5em;
+}
+
 .prose table {
     width: 100%;
     border-collapse: collapse;

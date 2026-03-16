@@ -13,7 +13,8 @@ npm run format       # Format all src files with Prettier
 npm run format:check # Check formatting without modifying files
 npm run test         # Run tests once (Vitest)
 npm run test:watch   # Run tests in watch mode
-npm run new-post     # Interactive CLI to create a new blog post
+npm run new-post          # Interactive CLI to create a new blog post
+npm run optimize-images   # Optimize images in content/ (runs automatically before build)
 ```
 
 ## Architecture
@@ -46,8 +47,9 @@ Markdown processing pipeline: gray-matter → remark-gfm → remark-rehype → r
 - `src/lib/types.ts` — shared TypeScript interfaces and constants (categories, etc.)
 - `src/components/PaginatedPosts.tsx` — client component handling search, tag filtering, and sorting
 - `src/components/SearchDialog.tsx` — Pagefind-powered search modal (Cmd/Ctrl+K)
-- `scripts/new-post.mjs` — post creation CLI
-- `scripts/generate-rss.mjs` — RSS feed generator (runs after `next build`)
+- `scripts/new-post.ts` — post creation CLI
+- `scripts/generate-rss.ts` — RSS feed generator (runs after `next build`)
+- `scripts/optimize-images.ts` — image optimization (runs before `next build`)
 
 ### Search
 

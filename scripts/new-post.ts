@@ -1,14 +1,14 @@
-#!/usr/bin/env node
+#!/usr/bin/env tsx
 
 /**
  * Script to create a new blog post.
  *
  * Usage:
- *   node scripts/new-post.mjs <category> <subcategory> <slug>
+ *   npx tsx scripts/new-post.ts <category> <subcategory> <slug>
  *
  * Example:
- *   node scripts/new-post.mjs technical system-design caching-strategies
- *   node scripts/new-post.mjs interviews frontend typescript-tips
+ *   npx tsx scripts/new-post.ts technical system-design caching-strategies
+ *   npx tsx scripts/new-post.ts interviews frontend typescript-tips
  */
 
 import fs from "fs";
@@ -24,15 +24,14 @@ const rl = readline.createInterface({
     output: process.stdout,
 });
 
-function ask(question) {
+function ask(question: string): Promise<string> {
     return new Promise((resolve) => rl.question(question, resolve));
 }
 
-async function main() {
+async function main(): Promise<void> {
     let [category, subcategory, slug] = process.argv.slice(2);
 
     if (!category) {
-        // List existing categories
         const existing = fs.existsSync(CONTENT_DIR)
             ? fs
                   .readdirSync(CONTENT_DIR, { withFileTypes: true })
@@ -87,26 +86,27 @@ description: "${description}"
 Write your content here...
 `;
 
-    // Sanitize inputs for path traversal protection
-    const sanitize = (str) => str.replace(/[^a-zA-Z0-9_-]/g, "");
+    const sanitize = (str: string): string => str.replace(/[^a-zA-Z0-9_-]/g, "");
     const safeCategory = sanitize(category);
     const safeSubcategory = sanitize(subcategory);
     const safeSlug = sanitize(slug);
 
-    const dir = path.join(CONTENT_DIR, safeCategory, safeSubcategory);
-    const filePath = path.join(dir, `${safeSlug}.md`);
+    const slugDir = path.join(CONTENT_DIR, safeCategory, safeSubcategory, safeSlug);
+    const filePath = path.join(slugDir, "index.md");
 
     if (fs.existsSync(filePath)) {
-        console.error(`\n❌ File already exists: ${filePath}`);
+        console.error(`\n❌ Post already exists: ${filePath}`);
         rl.close();
         process.exit(1);
     }
 
-    fs.mkdirSync(dir, { recursive: true });
+    fs.mkdirSync(slugDir, { recursive: true });
     fs.writeFileSync(filePath, frontmatter, "utf-8");
 
     console.log(`\n✅ Created: ${filePath}`);
     console.log(`📂 Category: ${safeCategory} → ${safeSubcategory}`);
+    console.log(`🖼️  Images: place them in ${slugDir}`);
+    console.log(`   Reference in markdown: ![alt](./your-image.png)`);
     console.log(`📝 Edit the file and run 'npm run dev' to see changes.`);
 
     rl.close();

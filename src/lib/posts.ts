@@ -9,6 +9,7 @@ import rehypeHighlight from "rehype-highlight";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeStringify from "rehype-stringify";
+import rehypeImages from "./rehype-images";
 import type { Post, PostMeta, CategoryTree, TOCItem } from "./types";
 
 const CONTENT_DIR = path.join(process.cwd(), "content");
@@ -44,17 +45,31 @@ export function getAllPosts(): PostMeta[] {
             const subDir = path.join(CONTENT_DIR, category, subcategory);
             if (!fs.existsSync(subDir)) continue;
 
-            const files = fs
-                .readdirSync(subDir)
-                .filter((f) => f.endsWith(".md"));
+            const entries = fs.readdirSync(subDir, { withFileTypes: true });
 
-            for (const file of files) {
-                const filePath = path.join(subDir, file);
+            for (const entry of entries) {
+                let filePath: string;
+                let slug: string;
+
+                if (entry.isFile() && entry.name.endsWith(".md")) {
+                    // Legacy format: slug.md
+                    slug = entry.name.replace(/\.md$/, "");
+                    filePath = path.join(subDir, entry.name);
+                } else if (entry.isDirectory()) {
+                    // New format: slug/index.md
+                    const indexPath = path.join(subDir, entry.name, "index.md");
+                    if (!fs.existsSync(indexPath)) continue;
+                    slug = entry.name;
+                    filePath = indexPath;
+                } else {
+                    continue;
+                }
+
                 const fileContent = fs.readFileSync(filePath, "utf-8");
                 const { data } = matter(fileContent);
 
                 posts.push({
-                    slug: file.replace(/\.md$/, ""),
+                    slug,
                     category,
                     subcategory,
                     frontmatter: {
@@ -93,25 +108,42 @@ export async function getPostBySlug(
     subcategory: string,
     slug: string
 ): Promise<Post | null> {
-    const filePath = path.join(
-        CONTENT_DIR,
-        category,
-        subcategory,
-        `${slug}.md`
-    );
+    // Support both slug/index.md (new) and slug.md (legacy)
+    const dirPath = path.join(CONTENT_DIR, category, subcategory, slug, "index.md");
+    const legacyPath = path.join(CONTENT_DIR, category, subcategory, `${slug}.md`);
+    const filePath = fs.existsSync(dirPath) ? dirPath : legacyPath;
 
     if (!fs.existsSync(filePath)) return null;
 
     const fileContent = fs.readFileSync(filePath, "utf-8");
     const { data, content } = matter(fileContent);
 
+    // Base public path for images if post uses slug/index.md format
+    const isDirectoryBased = fs.existsSync(dirPath);
+    const imageBasePath = isDirectoryBased
+        ? `/images/posts/${category}/${subcategory}/${slug}`
+        : null;
+
     const result = await unified()
         .use(remarkParse)
         .use(remarkGfm)
+        // Resolve relative image paths (./image.png → /images/posts/...)
+        .use(() => (tree) => {
+            if (!imageBasePath) return;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const visit = (node: any) => {
+                if (node.type === "image" && node.url?.startsWith("./")) {
+                    node.url = `${imageBasePath}/${node.url.slice(2)}`;
+                }
+                if (node.children) node.children.forEach(visit);
+            };
+            visit(tree);
+        })
         .use(remarkRehype, { allowDangerousHtml: true })
         .use(rehypeSlug)
         .use(rehypeAutolinkHeadings, { behavior: "wrap" })
         .use(rehypeHighlight)
+        .use(rehypeImages)
         .use(rehypeStringify, { allowDangerousHtml: true })
         .process(content);
 

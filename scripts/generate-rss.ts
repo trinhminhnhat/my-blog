@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env tsx
 
 /**
  * Generates RSS feed after build.
@@ -20,8 +20,18 @@ const SITE_DESCRIPTION = "A blog about technology, interviews, and more";
 const SITE_URL = "https://nhattm.dev";
 const AUTHOR = "Trịnh Minh Nhật";
 
-function getAllPosts() {
-    const posts = [];
+interface PostMeta {
+    slug: string;
+    category: string;
+    subcategory: string;
+    title: string;
+    date: string;
+    description?: string;
+    [key: string]: unknown;
+}
+
+function getAllPosts(): PostMeta[] {
+    const posts: PostMeta[] = [];
 
     if (!fs.existsSync(CONTENT_DIR)) return posts;
 
@@ -39,20 +49,27 @@ function getAllPosts() {
 
         for (const subcategory of subcategories) {
             const subDir = path.join(catPath, subcategory);
-            const files = fs
-                .readdirSync(subDir)
-                .filter((f) => f.endsWith(".md"));
+            const entries = fs.readdirSync(subDir, { withFileTypes: true });
 
-            for (const file of files) {
-                const filePath = path.join(subDir, file);
+            for (const entry of entries) {
+                let filePath: string;
+                let slug: string;
+
+                if (entry.isFile() && entry.name.endsWith(".md")) {
+                    slug = entry.name.replace(/\.md$/, "");
+                    filePath = path.join(subDir, entry.name);
+                } else if (entry.isDirectory()) {
+                    const indexPath = path.join(subDir, entry.name, "index.md");
+                    if (!fs.existsSync(indexPath)) continue;
+                    slug = entry.name;
+                    filePath = indexPath;
+                } else {
+                    continue;
+                }
+
                 const content = fs.readFileSync(filePath, "utf-8");
                 const { data } = matter(content);
-                posts.push({
-                    slug: file.replace(/\.md$/, ""),
-                    category,
-                    subcategory,
-                    ...data,
-                });
+                posts.push({ slug, category, subcategory, ...(data as Pick<PostMeta, "title" | "date"> & Partial<PostMeta>) });
             }
         }
     }
@@ -62,7 +79,7 @@ function getAllPosts() {
     );
 }
 
-function main() {
+function main(): void {
     const feed = new RSS({
         title: SITE_TITLE,
         description: SITE_DESCRIPTION,
@@ -78,7 +95,7 @@ function main() {
     for (const post of posts) {
         feed.item({
             title: post.title,
-            description: post.description || "",
+            description: post.description ?? "",
             url: `${SITE_URL}/post/${post.category}/${post.subcategory}/${post.slug}`,
             date: new Date(post.date),
             categories: [post.category, post.subcategory],

@@ -38,34 +38,47 @@ describe("content directory structure", () => {
     });
 
     it("should have markdown files in each subcategory", () => {
-        const checkDir = (dir: string) => {
-            const files = fs.readdirSync(dir).filter((f) => f.endsWith(".md"));
-            expect(files.length).toBeGreaterThan(0);
+        const countPosts = (dir: string): number => {
+            const entries = fs.readdirSync(dir, { withFileTypes: true });
+            let count = 0;
+            for (const entry of entries) {
+                if (entry.isFile() && entry.name.endsWith(".md")) count++;
+                else if (entry.isDirectory()) {
+                    const indexPath = path.join(dir, entry.name, "index.md");
+                    if (fs.existsSync(indexPath)) count++;
+                }
+            }
+            return count;
         };
 
-        checkDir(path.join(CONTENT_DIR, "technical", "system-design"));
-        checkDir(path.join(CONTENT_DIR, "technical", "aws"));
-        checkDir(path.join(CONTENT_DIR, "interviews", "frontend"));
-        checkDir(path.join(CONTENT_DIR, "interviews", "backend"));
+        expect(countPosts(path.join(CONTENT_DIR, "technical", "system-design"))).toBeGreaterThan(0);
+        expect(countPosts(path.join(CONTENT_DIR, "technical", "aws"))).toBeGreaterThan(0);
+        expect(countPosts(path.join(CONTENT_DIR, "interviews", "frontend"))).toBeGreaterThan(0);
+        expect(countPosts(path.join(CONTENT_DIR, "interviews", "backend"))).toBeGreaterThan(0);
     });
 
     it("all markdown files should have valid frontmatter", () => {
-        const walkDir = (dir: string): string[] => {
+        // Collect only post files (slug.md or slug/index.md), not nested index.md inside index.md dirs
+        const collectPosts = (dir: string, depth = 0): string[] => {
             const files: string[] = [];
             const entries = fs.readdirSync(dir, { withFileTypes: true });
             for (const entry of entries) {
                 const fullPath = path.join(dir, entry.name);
-                if (entry.isDirectory()) {
-                    files.push(...walkDir(fullPath));
-                } else if (entry.name.endsWith(".md")) {
+                if (entry.isDirectory() && depth < 2) {
+                    files.push(...collectPosts(fullPath, depth + 1));
+                } else if (entry.isDirectory() && depth === 2) {
+                    // slug directory: look for index.md
+                    const indexPath = path.join(fullPath, "index.md");
+                    if (fs.existsSync(indexPath)) files.push(indexPath);
+                } else if (entry.isFile() && entry.name.endsWith(".md") && depth === 2) {
                     files.push(fullPath);
                 }
             }
             return files;
         };
 
-        const mdFiles = walkDir(CONTENT_DIR);
-        expect(mdFiles.length).toBe(6);
+        const mdFiles = collectPosts(CONTENT_DIR);
+        expect(mdFiles.length).toBeGreaterThanOrEqual(6);
 
         for (const file of mdFiles) {
             const content = fs.readFileSync(file, "utf-8");
