@@ -82,7 +82,10 @@ async function processImage(
         const variantFilename = `${basename}-${w}.webp`;
         const destVariant = path.join(destDir, variantFilename);
         if (isNewerThan(srcPath, destVariant)) {
-            await sharp(srcPath).resize(w).webp({ quality: 80 }).toFile(destVariant);
+            await sharp(srcPath)
+                .resize(w)
+                .webp({ quality: 80 })
+                .toFile(destVariant);
         }
         variants.push({ src: `${publicPath}/${variantFilename}`, width: w });
     }
@@ -93,7 +96,10 @@ async function processImage(
     if (isNewerThan(srcPath, destFullWebp)) {
         await sharp(srcPath).webp({ quality: 80 }).toFile(destFullWebp);
     }
-    variants.push({ src: `${publicPath}/${fullWebpFilename}`, width: origWidth });
+    variants.push({
+        src: `${publicPath}/${fullWebpFilename}`,
+        width: origWidth,
+    });
 
     return {
         key: `${publicPath}/${filename}`,
@@ -162,11 +168,7 @@ async function main(): Promise<void> {
     }
 
     fs.mkdirSync(PUBLIC_IMAGES_DIR, { recursive: true });
-    fs.writeFileSync(
-        MANIFEST_PATH,
-        JSON.stringify(manifest, null, 2),
-        "utf-8"
-    );
+    fs.writeFileSync(MANIFEST_PATH, JSON.stringify(manifest, null, 2), "utf-8");
 
     if (processed > 0) {
         console.log(

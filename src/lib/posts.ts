@@ -4,7 +4,9 @@ import matter from "gray-matter";
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
 import remarkRehype from "remark-rehype";
+import rehypeKatex from "rehype-katex";
 import rehypeHighlight from "rehype-highlight";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
@@ -77,6 +79,8 @@ export function getAllPosts(): PostMeta[] {
                         date: data.date || "",
                         tags: data.tags || [],
                         description: data.description || "",
+                        series: data.series,
+                        series_order: data.series_order,
                     },
                 });
             }
@@ -103,14 +107,36 @@ export function getPostsBySubcategory(
     );
 }
 
+export function getPostsBySeries(seriesName: string): PostMeta[] {
+    return getAllPosts()
+        .filter((p) => p.frontmatter.series === seriesName)
+        .sort((a, b) => {
+            const orderA = a.frontmatter.series_order ?? Infinity;
+            const orderB = b.frontmatter.series_order ?? Infinity;
+            if (orderA !== orderB) return orderA - orderB;
+            return a.frontmatter.date.localeCompare(b.frontmatter.date);
+        });
+}
+
 export async function getPostBySlug(
     category: string,
     subcategory: string,
     slug: string
 ): Promise<Post | null> {
     // Support both slug/index.md (new) and slug.md (legacy)
-    const dirPath = path.join(CONTENT_DIR, category, subcategory, slug, "index.md");
-    const legacyPath = path.join(CONTENT_DIR, category, subcategory, `${slug}.md`);
+    const dirPath = path.join(
+        CONTENT_DIR,
+        category,
+        subcategory,
+        slug,
+        "index.md"
+    );
+    const legacyPath = path.join(
+        CONTENT_DIR,
+        category,
+        subcategory,
+        `${slug}.md`
+    );
     const filePath = fs.existsSync(dirPath) ? dirPath : legacyPath;
 
     if (!fs.existsSync(filePath)) return null;
@@ -127,6 +153,7 @@ export async function getPostBySlug(
     const result = await unified()
         .use(remarkParse)
         .use(remarkGfm)
+        .use(remarkMath)
         // Resolve relative image paths (./image.png → /images/posts/...)
         .use(() => (tree) => {
             if (!imageBasePath) return;
@@ -140,6 +167,7 @@ export async function getPostBySlug(
             visit(tree);
         })
         .use(remarkRehype, { allowDangerousHtml: true })
+        .use(rehypeKatex)
         .use(rehypeSlug)
         .use(rehypeAutolinkHeadings, { behavior: "wrap" })
         .use(rehypeHighlight)
@@ -156,6 +184,8 @@ export async function getPostBySlug(
             date: data.date || "",
             tags: data.tags || [],
             description: data.description || "",
+            series: data.series,
+            series_order: data.series_order,
         },
         content: result.toString(),
     };

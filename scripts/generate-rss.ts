@@ -69,7 +69,13 @@ function getAllPosts(): PostMeta[] {
 
                 const content = fs.readFileSync(filePath, "utf-8");
                 const { data } = matter(content);
-                posts.push({ slug, category, subcategory, ...(data as Pick<PostMeta, "title" | "date"> & Partial<PostMeta>) });
+                posts.push({
+                    slug,
+                    category,
+                    subcategory,
+                    ...(data as Pick<PostMeta, "title" | "date"> &
+                        Partial<PostMeta>),
+                });
             }
         }
     }

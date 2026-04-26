@@ -72,26 +72,47 @@ async function main(): Promise<void> {
         .map((t) => t.trim())
         .filter(Boolean);
 
+    const seriesInput = await ask(
+        "Series name (optional, press Enter to skip): "
+    );
+    const series = seriesInput.trim();
+    let seriesOrder: number | undefined;
+    if (series) {
+        const orderInput = await ask("Series order (e.g., 1, 2, 3): ");
+        const parsed = parseInt(orderInput.trim(), 10);
+        if (!isNaN(parsed)) seriesOrder = parsed;
+    }
+
     const today = new Date().toISOString().split("T")[0];
+
+    const seriesFields = series
+        ? `series: "${series}"\n${seriesOrder !== undefined ? `series_order: ${seriesOrder}\n` : ""}`
+        : "";
 
     const frontmatter = `---
 title: "${title}"
 date: "${today}"
 tags: [${tags.map((t) => `"${t}"`).join(", ")}]
 description: "${description}"
----
+${seriesFields}---
 
 ## Introduction
 
 Write your content here...
 `;
 
-    const sanitize = (str: string): string => str.replace(/[^a-zA-Z0-9_-]/g, "");
+    const sanitize = (str: string): string =>
+        str.replace(/[^a-zA-Z0-9_-]/g, "");
     const safeCategory = sanitize(category);
     const safeSubcategory = sanitize(subcategory);
     const safeSlug = sanitize(slug);
 
-    const slugDir = path.join(CONTENT_DIR, safeCategory, safeSubcategory, safeSlug);
+    const slugDir = path.join(
+        CONTENT_DIR,
+        safeCategory,
+        safeSubcategory,
+        safeSlug
+    );
     const filePath = path.join(slugDir, "index.md");
 
     if (fs.existsSync(filePath)) {

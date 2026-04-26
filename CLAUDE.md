@@ -38,7 +38,7 @@ Blog posts are Markdown files with YAML frontmatter stored under `content/[categ
 
 All content is read from the filesystem at build time via `src/lib/posts.ts`, which exposes `getAllPosts()`, `getPostsByCategory()`, and `getPostBySlug()`.
 
-Markdown processing pipeline: gray-matter → remark-gfm → remark-rehype → rehype-slug → rehype-autolink-headings → rehype-highlight → HTML string.
+Markdown processing pipeline: gray-matter → remark-gfm → remark-math → remark-rehype → rehype-katex → rehype-slug → rehype-autolink-headings → rehype-highlight → HTML string.
 
 ### Key files
 
@@ -63,6 +63,15 @@ Tailwind CSS v4 with the `@theme` syntax. Entry point is `src/app/globals.scss`,
 
 Prettier (`.prettierrc`) + ESLint enforced. Config: 4-space indent, double quotes, LF line endings.
 Run `npm run lint:fix` to fix both lint errors and formatting in one step.
+
+Use English for all code, comments, variable names, and UI labels. Blog post content may be in any language.
+
+### LaTeX / Math
+
+Blog posts support LaTeX math via **KaTeX** (`remark-math` + `rehype-katex`).
+
+- Inline math: `$E = mc^2$`
+- Block math: `$$\sum_{i=0}^{n} i = \frac{n(n+1)}{2}$$`
 
 ## Gotchas
 

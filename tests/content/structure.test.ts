@@ -51,10 +51,18 @@ describe("content directory structure", () => {
             return count;
         };
 
-        expect(countPosts(path.join(CONTENT_DIR, "technical", "system-design"))).toBeGreaterThan(0);
-        expect(countPosts(path.join(CONTENT_DIR, "technical", "aws"))).toBeGreaterThan(0);
-        expect(countPosts(path.join(CONTENT_DIR, "interviews", "frontend"))).toBeGreaterThan(0);
-        expect(countPosts(path.join(CONTENT_DIR, "interviews", "backend"))).toBeGreaterThan(0);
+        expect(
+            countPosts(path.join(CONTENT_DIR, "technical", "system-design"))
+        ).toBeGreaterThan(0);
+        expect(
+            countPosts(path.join(CONTENT_DIR, "technical", "aws"))
+        ).toBeGreaterThan(0);
+        expect(
+            countPosts(path.join(CONTENT_DIR, "interviews", "frontend"))
+        ).toBeGreaterThan(0);
+        expect(
+            countPosts(path.join(CONTENT_DIR, "interviews", "backend"))
+        ).toBeGreaterThan(0);
     });
 
     it("all markdown files should have valid frontmatter", () => {
@@ -70,7 +78,11 @@ describe("content directory structure", () => {
                     // slug directory: look for index.md
                     const indexPath = path.join(fullPath, "index.md");
                     if (fs.existsSync(indexPath)) files.push(indexPath);
-                } else if (entry.isFile() && entry.name.endsWith(".md") && depth === 2) {
+                } else if (
+                    entry.isFile() &&
+                    entry.name.endsWith(".md") &&
+                    depth === 2
+                ) {
                     files.push(fullPath);
                 }
             }

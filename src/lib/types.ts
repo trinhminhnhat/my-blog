@@ -3,6 +3,8 @@ export interface PostFrontmatter {
     date: string;
     tags: string[];
     description: string;
+    series?: string;
+    series_order?: number;
 }
 
 export interface Post {

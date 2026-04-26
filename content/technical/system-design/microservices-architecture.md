@@ -3,6 +3,8 @@ title: "Microservices Architecture: A Comprehensive Guide"
 date: "2026-02-10"
 tags: ["microservices", "system-design", "architecture"]
 description: "Learn about microservices architecture patterns, benefits, and best practices for building scalable distributed systems."
+series: "System Design Fundamentals"
+series_order: 2
 ---
 
 ## Introduction

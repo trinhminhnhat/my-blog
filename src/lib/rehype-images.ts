@@ -67,7 +67,9 @@ const rehypeImages: Plugin<[], Root> = () => {
             el.properties.height = entry.height;
 
             // Build srcset from variants sorted by width
-            const sorted = [...entry.variants].sort((a, b) => a.width - b.width);
+            const sorted = [...entry.variants].sort(
+                (a, b) => a.width - b.width
+            );
             const srcset = sorted.map((v) => `${v.src} ${v.width}w`).join(", ");
 
             const sourceNode: Element = {

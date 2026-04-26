@@ -3,6 +3,8 @@ title: "Database Design Patterns for Scalable Systems"
 date: "2026-02-05"
 tags: ["database", "system-design", "scalability"]
 description: "Explore essential database design patterns including sharding, replication, and CQRS for building scalable systems."
+series: "System Design Fundamentals"
+series_order: 3
 ---
 
 ## Introduction

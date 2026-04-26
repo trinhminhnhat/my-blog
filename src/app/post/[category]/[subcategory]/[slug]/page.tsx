@@ -4,6 +4,7 @@ import {
     getPostBySlug,
     getCategories,
     getAllPosts,
+    getPostsBySeries,
     formatCategoryName,
     formatDate,
     extractTOC,
@@ -12,6 +13,7 @@ import { Calendar, User } from "lucide-react";
 import { AUTHOR } from "@/lib/types";
 import CategorySidebar from "@/components/CategorySidebar";
 import TableOfContents from "@/components/TableOfContents";
+import SeriesBox from "@/components/SeriesBox";
 
 export async function generateStaticParams() {
     const posts = getAllPosts();
@@ -48,6 +50,8 @@ export default async function PostPage({
 
     const categories = getCategories();
     const toc = extractTOC(post.content);
+    const seriesName = post.frontmatter.series;
+    const seriesPosts = seriesName ? getPostsBySeries(seriesName) : [];
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr_200px] gap-8">
@@ -122,6 +126,15 @@ export default async function PostPage({
                         </p>
                     )}
                 </header>
+
+                {/* Series navigation */}
+                {seriesName && seriesPosts.length > 1 && (
+                    <SeriesBox
+                        seriesName={seriesName}
+                        posts={seriesPosts}
+                        currentSlug={slug}
+                    />
+                )}
 
                 {/* Post Content */}
                 <div

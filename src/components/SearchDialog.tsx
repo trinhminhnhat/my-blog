@@ -101,7 +101,9 @@ export default function SearchDialog() {
             try {
                 // Build a runtime-only URL so Next.js/Turbopack won't resolve it at compile time
                 const url = "/pagefind/pagefind.js";
-                const pf: Pagefind = await import(/* webpackIgnore: true */ url);
+                const pf: Pagefind = await import(
+                    /* webpackIgnore: true */ url
+                );
                 pagefindRef.current = pf;
                 setLoading(false);
                 setTimeout(() => inputRef.current?.focus(), 50);
