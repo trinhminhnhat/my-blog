@@ -27,6 +27,7 @@ describe("content directory structure", () => {
             .map((d) => d.name);
         expect(techSubs).toContain("system-design");
         expect(techSubs).toContain("aws");
+        expect(techSubs).toContain("fundamentals");
 
         const intDir = path.join(CONTENT_DIR, "interviews");
         const intSubs = fs
@@ -62,6 +63,9 @@ describe("content directory structure", () => {
         ).toBeGreaterThan(0);
         expect(
             countPosts(path.join(CONTENT_DIR, "interviews", "backend"))
+        ).toBeGreaterThan(0);
+        expect(
+            countPosts(path.join(CONTENT_DIR, "technical", "fundamentals"))
         ).toBeGreaterThan(0);
     });
 

@@ -11,6 +11,7 @@ import rehypeHighlight from "rehype-highlight";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeStringify from "rehype-stringify";
+import rehypeRaw from "rehype-raw";
 import rehypeImages from "./rehype-images";
 import type { Post, PostMeta, CategoryTree, TOCItem } from "./types";
 
@@ -167,6 +168,7 @@ export async function getPostBySlug(
             visit(tree);
         })
         .use(remarkRehype, { allowDangerousHtml: true })
+        .use(rehypeRaw)
         .use(rehypeKatex)
         .use(rehypeSlug)
         .use(rehypeAutolinkHeadings, { behavior: "wrap" })

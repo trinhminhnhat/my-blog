@@ -24,9 +24,9 @@ describe("getCategories", () => {
 });
 
 describe("getAllPosts", () => {
-    it("should return all 12 posts", () => {
+    it("should return all 23 posts", () => {
         const posts = getAllPosts();
-        expect(posts.length).toBe(12);
+        expect(posts.length).toBe(23);
     });
 
     it("should sort posts by date descending", () => {

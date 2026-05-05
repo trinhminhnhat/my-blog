@@ -14,6 +14,7 @@ import { AUTHOR } from "@/lib/types";
 import CategorySidebar from "@/components/CategorySidebar";
 import TableOfContents from "@/components/TableOfContents";
 import SeriesBox from "@/components/SeriesBox";
+import SeriesNavigation from "@/components/SeriesNavigation";
 
 export async function generateStaticParams() {
     const posts = getAllPosts();
@@ -141,6 +142,11 @@ export default async function PostPage({
                     className="prose"
                     dangerouslySetInnerHTML={{ __html: post.content }}
                 />
+
+                {/* Series prev/next navigation */}
+                {seriesName && seriesPosts.length > 1 && (
+                    <SeriesNavigation posts={seriesPosts} currentSlug={slug} />
+                )}
             </article>
 
             {/* Right Sidebar - TOC */}
